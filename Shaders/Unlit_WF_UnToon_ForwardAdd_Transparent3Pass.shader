@@ -375,6 +375,54 @@ Shader "UnlitWF/WF_UnToon_Transparent3Pass" {
         }
 
         Pass {
+            Name "MAIN_OPAQUE"
+            Tags { "LightMode" = "ForwardBase" }
+
+            Cull OFF
+            ZWrite ON
+            Blend Off
+
+            CGPROGRAM
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #pragma target 4.5
+
+            #define _WF_ALPHA_FRESNEL
+            #define _WF_ALPHA_CUSTOM    if (alpha < _Cutoff) { discard; } else { alpha *= _AL_Power; } // _Cutoff 以上を描画
+
+            #pragma shader_feature_local _AO_ENABLE
+            #pragma shader_feature_local _NM_ENABLE
+            #pragma shader_feature_local _OL_ENABLE
+            #pragma shader_feature_local _TS_ENABLE
+            #pragma shader_feature_local _VC_ENABLE
+            #pragma shader_feature_local_fragment _ _ES_SCROLL_ENABLE
+            #pragma shader_feature_local_fragment _ _MT_ADD2ND_ENABLE _MT_ONLY2ND_ENABLE
+            #pragma shader_feature_local_fragment _ _NM_BL2ND_ENABLE _NM_SW2ND_ENABLE
+            #pragma shader_feature_local_fragment _ _TS_STEP1_ENABLE _TS_STEP2_ENABLE _TS_STEP3_ENABLE
+            #pragma shader_feature_local_fragment _BK_ENABLE
+            #pragma shader_feature_local_fragment _CH_ENABLE
+            #pragma shader_feature_local_fragment _CL_ENABLE
+            #pragma shader_feature_local_fragment _DF_ENABLE
+            #pragma shader_feature_local_fragment _ES_ENABLE
+            #pragma shader_feature_local_fragment _HL_ENABLE
+            #pragma shader_feature_local_fragment _LM_ENABLE
+            #pragma shader_feature_local_fragment _MT_ENABLE
+            #pragma shader_feature_local_fragment _TR_ENABLE
+
+            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fog
+            #pragma multi_compile_instancing
+
+            #pragma skip_variants SHADOWS_SCREEN SHADOWS_CUBE SHADOWS_SHADOWMASK
+
+            #include "WF_UnToon.cginc"
+
+            ENDCG
+        }
+
+        Pass {
             Name "MAIN_BACK"
             Tags { "LightMode" = "ForwardBase" }
 
@@ -392,6 +440,103 @@ Shader "UnlitWF/WF_UnToon_Transparent3Pass" {
             #define _WF_ALPHA_FRESNEL
             #define _WF_ALPHA_CUSTOM    if (alpha < _Cutoff) { alpha *= _AL_Power; } else { discard; } // _Cutoff 以下を描画
             #define _WF_FACE_BACK
+
+            #pragma shader_feature_local _AO_ENABLE
+            #pragma shader_feature_local _NM_ENABLE
+            #pragma shader_feature_local _OL_ENABLE
+            #pragma shader_feature_local _TS_ENABLE
+            #pragma shader_feature_local _VC_ENABLE
+            #pragma shader_feature_local_fragment _ _ES_SCROLL_ENABLE
+            #pragma shader_feature_local_fragment _ _MT_ADD2ND_ENABLE _MT_ONLY2ND_ENABLE
+            #pragma shader_feature_local_fragment _ _NM_BL2ND_ENABLE _NM_SW2ND_ENABLE
+            #pragma shader_feature_local_fragment _ _TS_STEP1_ENABLE _TS_STEP2_ENABLE _TS_STEP3_ENABLE
+            #pragma shader_feature_local_fragment _BK_ENABLE
+            #pragma shader_feature_local_fragment _CH_ENABLE
+            #pragma shader_feature_local_fragment _CL_ENABLE
+            #pragma shader_feature_local_fragment _DF_ENABLE
+            #pragma shader_feature_local_fragment _ES_ENABLE
+            #pragma shader_feature_local_fragment _HL_ENABLE
+            #pragma shader_feature_local_fragment _LM_ENABLE
+            #pragma shader_feature_local_fragment _MT_ENABLE
+            #pragma shader_feature_local_fragment _TR_ENABLE
+
+            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fog
+            #pragma multi_compile_instancing
+
+            #pragma skip_variants SHADOWS_SCREEN SHADOWS_CUBE SHADOWS_SHADOWMASK
+
+            #include "WF_UnToon.cginc"
+
+            ENDCG
+        }
+
+        Pass {
+            Name "MAIN_BACK"
+            Tags { "LightMode" = "ForwardBase" }
+
+            Cull FRONT
+            ZWrite OFF
+            Blend SrcAlpha OneMinusSrcAlpha
+
+            CGPROGRAM
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #pragma target 4.5
+
+            #define _WF_ALPHA_FRESNEL
+            #define _WF_ALPHA_CUSTOM    if (alpha < _Cutoff) { alpha *= _AL_Power; } else { discard; } // _Cutoff 以下を描画
+            #define _WF_FACE_BACK
+
+            #pragma shader_feature_local _AO_ENABLE
+            #pragma shader_feature_local _NM_ENABLE
+            #pragma shader_feature_local _OL_ENABLE
+            #pragma shader_feature_local _TS_ENABLE
+            #pragma shader_feature_local _VC_ENABLE
+            #pragma shader_feature_local_fragment _ _ES_SCROLL_ENABLE
+            #pragma shader_feature_local_fragment _ _MT_ADD2ND_ENABLE _MT_ONLY2ND_ENABLE
+            #pragma shader_feature_local_fragment _ _NM_BL2ND_ENABLE _NM_SW2ND_ENABLE
+            #pragma shader_feature_local_fragment _ _TS_STEP1_ENABLE _TS_STEP2_ENABLE _TS_STEP3_ENABLE
+            #pragma shader_feature_local_fragment _BK_ENABLE
+            #pragma shader_feature_local_fragment _CH_ENABLE
+            #pragma shader_feature_local_fragment _CL_ENABLE
+            #pragma shader_feature_local_fragment _DF_ENABLE
+            #pragma shader_feature_local_fragment _ES_ENABLE
+            #pragma shader_feature_local_fragment _HL_ENABLE
+            #pragma shader_feature_local_fragment _LM_ENABLE
+            #pragma shader_feature_local_fragment _MT_ENABLE
+            #pragma shader_feature_local_fragment _TR_ENABLE
+
+            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fog
+            #pragma multi_compile_instancing
+
+            #pragma skip_variants SHADOWS_SCREEN SHADOWS_CUBE SHADOWS_SHADOWMASK
+
+            #include "WF_UnToon.cginc"
+
+            ENDCG
+        }
+
+        Pass {
+            Name "MAIN_FRONT"
+            Tags { "LightMode" = "ForwardBase" }
+
+            Cull BACK
+            ZWrite [_AL_ZWrite]
+            Blend SrcAlpha OneMinusSrcAlpha
+
+            CGPROGRAM
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #pragma target 4.5
+
+            #define _WF_ALPHA_FRESNEL
+            #define _WF_ALPHA_CUSTOM    if (alpha < _Cutoff) { alpha *= _AL_Power; } else { discard; } // _Cutoff 以下を描画
 
             #pragma shader_feature_local _AO_ENABLE
             #pragma shader_feature_local _NM_ENABLE
