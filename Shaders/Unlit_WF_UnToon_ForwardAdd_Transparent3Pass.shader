@@ -336,6 +336,8 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
 
             CGPROGRAM
 
+			#pragma multi_compile_local _PASS_FB_WITH_FA
+
             #pragma vertex vert
             #pragma fragment frag
 
@@ -376,13 +378,15 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
 
         Pass {
             Name "MAIN_OPAQUE_FORWARDADD"
-            Tags { "LightMode" = "ForwardBase" }
+            Tags { "LightMode" = "ForwardAdd" }
 
             Cull OFF
-            ZWrite ON
-            Blend Off
+            BlendOp Add
+            Blend One One
 
             CGPROGRAM
+
+			#pragma multi_compile_local _PASS_FA
 
             #pragma vertex vert
             #pragma fragment frag
@@ -411,7 +415,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
             #pragma shader_feature_local_fragment _MT_ENABLE
             #pragma shader_feature_local_fragment _TR_ENABLE
 
-            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fwdadd
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
@@ -431,6 +435,8 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
             Blend SrcAlpha OneMinusSrcAlpha
 
             CGPROGRAM
+
+			#pragma multi_compile_local _PASS_FB_WITH_FA
 
             #pragma vertex vert
             #pragma fragment frag
@@ -473,13 +479,15 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
 
         Pass {
             Name "MAIN_BACK_FORWARDADD"
-            Tags { "LightMode" = "ForwardBase" }
+            Tags { "LightMode" = "ForwardAdd" }
 
             Cull FRONT
-            ZWrite OFF
-            Blend SrcAlpha OneMinusSrcAlpha
+            BlendOp Add
+            Blend One One
 
             CGPROGRAM
+
+			#pragma multi_compile_local _PASS_FA
 
             #pragma vertex vert
             #pragma fragment frag
@@ -509,7 +517,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
             #pragma shader_feature_local_fragment _MT_ENABLE
             #pragma shader_feature_local_fragment _TR_ENABLE
 
-            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fwdadd
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
@@ -529,6 +537,8 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
             Blend SrcAlpha OneMinusSrcAlpha
 
             CGPROGRAM
+
+			#pragma multi_compile_local _PASS_FB_WITH_FA
 
             #pragma vertex vert
             #pragma fragment frag
@@ -570,13 +580,15 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
 
         Pass {
             Name "MAIN_FRONT_FORWARDADD"
-            Tags { "LightMode" = "ForwardBase" }
+            Tags { "LightMode" = "ForwardAdd" }
 
             Cull BACK
-            ZWrite [_AL_ZWrite]
-            Blend SrcAlpha OneMinusSrcAlpha
+            BlendOp Add
+            Blend One One
 
             CGPROGRAM
+
+			#pragma multi_compile_local _PASS_FA
 
             #pragma vertex vert
             #pragma fragment frag
@@ -605,7 +617,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
             #pragma shader_feature_local_fragment _MT_ENABLE
             #pragma shader_feature_local_fragment _TR_ENABLE
 
-            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fwdadd
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 

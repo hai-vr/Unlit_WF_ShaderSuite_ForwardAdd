@@ -316,6 +316,8 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Opaque" {
 
             CGPROGRAM
 
+			#pragma multi_compile_local _PASS_FB_WITH_FA
+
             #pragma vertex vert
             #pragma fragment frag
 
@@ -353,11 +355,15 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Opaque" {
 
         Pass {
             Name "MAIN_FORWARDADD"
-            Tags { "LightMode" = "ForwardBase" }
+            Tags { "LightMode" = "ForwardAdd" }
 
             Cull [_CullMode]
+            BlendOp Add
+			Blend One One
 
             CGPROGRAM
+
+			#pragma multi_compile_local _PASS_FA
 
             #pragma vertex vert
             #pragma fragment frag
@@ -383,7 +389,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Opaque" {
             #pragma shader_feature_local_fragment _MT_ENABLE
             #pragma shader_feature_local_fragment _TR_ENABLE
 
-            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fwdadd
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
