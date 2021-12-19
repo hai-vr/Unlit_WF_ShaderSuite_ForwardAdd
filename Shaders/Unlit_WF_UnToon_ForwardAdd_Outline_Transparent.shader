@@ -469,7 +469,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/UnToon_Outline/WF_UnToon_ForwardAdd_Outline_Tr
         }
 
         Pass {
-            Name "MAIN_BACK"
+            Name "MAIN_BACK_FORWARDADD"
             Tags { "LightMode" = "ForwardBase" }
 
             Cull FRONT
@@ -565,7 +565,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/UnToon_Outline/WF_UnToon_ForwardAdd_Outline_Tr
         }
 
         Pass {
-            Name "MAIN_FRONT"
+            Name "MAIN_FRONT_FORWARDADD"
             Tags { "LightMode" = "ForwardBase" }
 
             Cull BACK

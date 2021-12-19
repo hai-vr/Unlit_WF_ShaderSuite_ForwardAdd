@@ -375,7 +375,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
         }
 
         Pass {
-            Name "MAIN_OPAQUE"
+            Name "MAIN_OPAQUE_FORWARDADD"
             Tags { "LightMode" = "ForwardBase" }
 
             Cull OFF
@@ -472,7 +472,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
         }
 
         Pass {
-            Name "MAIN_BACK"
+            Name "MAIN_BACK_FORWARDADD"
             Tags { "LightMode" = "ForwardBase" }
 
             Cull FRONT
@@ -569,7 +569,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_Transparent3Pass" {
         }
 
         Pass {
-            Name "MAIN_FRONT"
+            Name "MAIN_FRONT_FORWARDADD"
             Tags { "LightMode" = "ForwardBase" }
 
             Cull BACK

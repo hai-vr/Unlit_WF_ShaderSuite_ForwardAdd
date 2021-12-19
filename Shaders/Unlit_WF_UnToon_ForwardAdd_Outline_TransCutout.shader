@@ -432,7 +432,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/UnToon_Outline/WF_UnToon_ForwardAdd_Outline_Tr
         }
 
         Pass {
-            Name "MAIN"
+            Name "MAIN_FORWARDADD"
             Tags { "LightMode" = "ForwardBase" }
 
             Cull [_CullMode]

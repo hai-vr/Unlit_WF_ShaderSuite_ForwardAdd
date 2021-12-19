@@ -368,7 +368,7 @@ Shader "UnlitWF/UnToon_ForwardAdd/WF_UnToon_ForwardAdd_TransCutout" {
         }
 
         Pass {
-            Name "MAIN"
+            Name "MAIN_FORWARDADD"
             Tags { "LightMode" = "ForwardBase" }
 
             Cull [_CullMode]
