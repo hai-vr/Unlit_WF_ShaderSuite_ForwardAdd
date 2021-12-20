@@ -129,6 +129,28 @@
         return col;
     }
 
+    float3 OmniDirectional_ForwardAdd(
+        float3 lightPos,
+        float3 col0, float lightAttenSq, float3 ws_vertex) {
+
+        // UnityCG.cginc にある Shade4PointLights の等方向版
+
+        if ( !any(lightPos) ) {
+            col0.rgb = 0;
+        }
+
+        float3 toLight = lightPos - ws_vertex;
+
+        float lengthSq = dot(toLight, toLight);
+        // ws_normal との内積は取らない。これによって反射光の強さではなく、頂点に当たるライトの強さが取れる。
+
+        // attenuation
+        float atten = 1.0 / (1.0 + lengthSq * lightAttenSq);
+
+        float3 col = col0 * atten.x;
+        return col;
+    }
+
 
     float3 sampleAdditionalLightColor(float3 ws_vertex) {
 #ifdef VERTEXLIGHT_ON
@@ -142,7 +164,16 @@
                 ws_vertex
             );
 #else
+    #ifdef _PASS_FA
+        return OmniDirectional_ForwardAdd(
+                _WorldSpaceLightPos0,
+                _LightColor0.rgb,
+                1,
+                ws_vertex
+            );
+    #else
         return float3(0, 0, 0);
+    #endif
 #endif
     }
 
@@ -158,7 +189,16 @@
                 ws_vertex
             );
 #else
+    #ifdef _PASS_FA
+        return OmniDirectional_ForwardAdd(
+                _WorldSpaceLightPos0,
+                _LightColor0.rgb,
+                1,
+                ws_vertex
+            );
+    #else
         return float3(0, 0, 0);
+    #endif
 #endif
     }
 

@@ -296,9 +296,17 @@
 
     float3 calcLightColorVertex(float3 ws_vertex, float3 ambientColor) {
         float3 lightColorMain = sampleMainLightColor();
-        float3 lightColorSub4 = sampleAdditionalLightColor(ws_vertex);
+        #ifdef _PASS_FB_WITH_FA
+            float3 lightColorSub4 = float3(0, 0, 0);
+        #else
+            float3 lightColorSub4 = sampleAdditionalLightColor(ws_vertex);
+        #endif
 
-        float3 color = NON_ZERO_VEC3(lightColorMain + lightColorSub4 + ambientColor);   // 合成
+        #ifdef _PASS_FA
+            float3 color = NON_ZERO_VEC3(lightColorSub4 * 100);   // 合成
+        #else
+            float3 color = NON_ZERO_VEC3(lightColorMain + lightColorSub4 + ambientColor);   // 合成
+        #endif
         float power = MAX_RGB(color);                       // 明度
         color = lerp( power.xxx, color, _GL_BlendPower);    // 色の混合
         color /= power;                                     // 正規化(colorはゼロではないのでpowerが0除算になることはない)

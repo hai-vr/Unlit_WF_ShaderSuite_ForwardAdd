@@ -23,6 +23,7 @@
     ////////////////////////////
 
     #include "WF_INPUT_UnToon.cginc"
+    #include "AutoLight.cginc"
 
     ////////////////////////////
     // main structure
@@ -61,6 +62,9 @@
         float3 bitangent        : TEXCOORD6;    // world space
 #endif
         UNITY_FOG_COORDS(7)
+	#ifdef _PASS_FA
+		LIGHTING_COORDS(8, 9)
+	#endif
         UNITY_VERTEX_INPUT_INSTANCE_ID
         UNITY_VERTEX_OUTPUT_STEREO
     };
@@ -100,6 +104,9 @@
 #else
         localNormalToWorldTangentSpace(v.normal, o.normal);
 #endif
+	#ifdef _PASS_FA
+		TRANSFER_VERTEX_TO_FRAGMENT(o);
+	#endif
 
         // 環境光取得
         float3 ambientColor = calcAmbientColorVertex(v.uv_lmap);
@@ -186,6 +193,10 @@
         color.a = saturate(color.a);
         // リフラクション
         affectRefraction(i, facing, ws_normal, ws_bump_normal, color);
+        
+        #ifdef _PASS_FA
+        color = color * LIGHT_ATTENUATION(i);
+        #endif
 
         // fog
         UNITY_APPLY_FOG(i.fogCoord, color);

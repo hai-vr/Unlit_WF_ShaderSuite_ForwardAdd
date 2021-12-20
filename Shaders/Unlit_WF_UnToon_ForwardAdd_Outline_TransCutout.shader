@@ -14,7 +14,7 @@
  *  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
  *  TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-Shader "UnlitWF/UnToon_Outline/WF_UnToon_Outline_TransCutout" {
+Shader "UnlitWF/UnToon_ForwardAdd/UnToon_Outline/WF_UnToon_ForwardAdd_Outline_TransCutout" {
 
     Properties {
         // 基本
@@ -393,6 +393,8 @@ Shader "UnlitWF/UnToon_Outline/WF_UnToon_Outline_TransCutout" {
 
             CGPROGRAM
 
+			#pragma multi_compile_local _PASS_FB_WITH_FA
+
             #pragma vertex vert
             #pragma fragment frag
 
@@ -432,13 +434,17 @@ Shader "UnlitWF/UnToon_Outline/WF_UnToon_Outline_TransCutout" {
         }
 
         Pass {
-            Name "MAIN"
-            Tags { "LightMode" = "ForwardBase" }
+            Name "MAIN_FORWARDADD"
+            Tags { "LightMode" = "ForwardAdd" }
 
             Cull [_CullMode]
             AlphaToMask [_AL_AlphaToMask]
+            BlendOp Add
+			Blend One One
 
             CGPROGRAM
+
+			#pragma multi_compile_local _PASS_FA
 
             #pragma vertex vert
             #pragma fragment frag
@@ -467,7 +473,7 @@ Shader "UnlitWF/UnToon_Outline/WF_UnToon_Outline_TransCutout" {
             #pragma shader_feature_local_fragment _MT_ENABLE
             #pragma shader_feature_local_fragment _TR_ENABLE
 
-            #pragma multi_compile_fwdbase
+            #pragma multi_compile_fwdadd
             #pragma multi_compile_fog
             #pragma multi_compile_instancing
 
