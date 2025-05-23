@@ -1121,7 +1121,7 @@
         #define affectOcclusion(i, uv_main, color)
     #endif
 
-    float3 calcAmbientColorVertex(float2 uv_lmap) {
+    float3 calcAmbientColorVertex(float2 uv_lmap, float3 ws_vertex) {
         // ライトマップもしくは環境光を取得
         #ifdef _LMAP_ENABLE
             #if defined(_AO_ENABLE)
@@ -1135,7 +1135,7 @@
                 return pickLightmapLod(uv_lmap);
             #endif
         #else
-            return sampleSHLightColor();
+            return sampleSHLightColor(ws_vertex);
         #endif
     }
 

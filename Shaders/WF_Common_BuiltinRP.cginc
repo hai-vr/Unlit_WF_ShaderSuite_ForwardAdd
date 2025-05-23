@@ -20,6 +20,7 @@
 
     #include "UnityCG.cginc"
     #include "Lighting.cginc"
+    #include "UNLIT_WF_LightVolumes.cginc"
 
     ////////////////////////////
     // Texture Definition
@@ -63,15 +64,17 @@
         return _LightColor0.rgb;
     }
 
-    float3 sampleSHLightColor() {
+    float3 sampleSHLightColor(float3 ws_vertex) {
         float3 col = float3(0, 0, 0);
-        col += ShadeSH9( float4(+1, 0, 0, 1) );
-        col += ShadeSH9( float4(-1, 0, 0, 1) );
-        col += ShadeSH9( float4(0, 0, +1, 1) );
-        col += ShadeSH9( float4(0, 0, -1, 1) );
+        float3 L0, L1r, L1g, L1b;
+        LightVolumeSH(ws_vertex, L0, L1r, L1g, L1b);
+        col += LightVolumeEvaluate(float4(+1, 0, 0, 1), L0, L1r, L1g, L1b);
+        col += LightVolumeEvaluate(float4(-1, 0, 0, 1), L0, L1r, L1g, L1b);
+        col += LightVolumeEvaluate(float4(0, 0, +1, 1), L0, L1r, L1g, L1b);
+        col += LightVolumeEvaluate(float4(0, 0, -1, 1), L0, L1r, L1g, L1b);
         col /= 4;
-        col += ShadeSH9( float4(0, +1, 0, 1) );
-        col += ShadeSH9( float4(0, -1, 0, 1) );
+        col += LightVolumeEvaluate(float4(0, +1, 0, 1), L0, L1r, L1g, L1b);
+        col += LightVolumeEvaluate(float4(0, -1, 0, 1), L0, L1r, L1g, L1b);
         return col / 3;
     }
 

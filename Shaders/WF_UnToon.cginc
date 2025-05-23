@@ -109,7 +109,7 @@
 	#endif
 
         // 環境光取得
-        float3 ambientColor = calcAmbientColorVertex(v.uv_lmap);
+        float3 ambientColor = calcAmbientColorVertex(v.uv_lmap, o.ws_vertex);
         // 影コントラスト
         calcToonShadeContrast(o.ws_vertex, o.ws_light_dir, ambientColor, o.shadow_power);
         // Anti-Glare とライト色ブレンドを同時に計算
